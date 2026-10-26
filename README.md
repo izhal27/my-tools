@@ -10,7 +10,7 @@ Tema hand drawn / retro · satu file · tanpa build · siap di-hosting di GitHub
 ![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-c1121f?style=for-the-badge&logo=github&logoColor=fdf0d5)
 ![No Build](https://img.shields.io/badge/No_Build-669bbc?style=for-the-badge&logoColor=003049)
 
-[🌐 Lihat Demo](https://izhal27.github.io/NAMA-REPO/) · [➕ Tambah Tool](#-menambah-tool-baru) · [🚀 Deploy](#-deploy-ke-github-pages)
+[🌐 Lihat Demo](https://izhal27.github.io/my-tools/) · [➕ Tambah Tool](#-menambah-tool-baru) · [🚀 Deploy](#-deploy-ke-github-pages)
 
 </div>
 
