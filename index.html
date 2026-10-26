@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Toolbox IzHaL — Kumpulan Tools</title>
+    <meta name="description" content="Portal kumpulan tools praktis." />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧰</text></svg>"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Patrick+Hand&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              maroon: "#780000",
+              red: { retro: "#c1121f" },
+              cream: "#fdf0d5",
+              navy: "#003049",
+              sky: { retro: "#669bbc" },
+            },
+            fontFamily: {
+              head: ['"Caveat Brush"', "cursive"],
+              body: ['"Patrick Hand"', "cursive"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Patrick Hand", cursive;
+        background-color: #fdf0d5;
+        /* tekstur titik-titik ala kertas retro */
+        background-image: radial-gradient(#669bbc55 1.5px, transparent 1.5px);
+        background-size: 22px 22px;
+      }
+      .wobbly {
+        border-radius: 255px 18px 225px 18px / 18px 225px 18px 255px;
+      }
+      .wobbly-2 {
+        border-radius: 18px 225px 18px 255px / 255px 18px 225px 18px;
+      }
+      .hard-shadow {
+        box-shadow: 6px 6px 0 #003049;
+      }
+      .card {
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      .card:hover,
+      .card:focus-visible {
+        transform: rotate(0deg) translate(-3px, -3px) !important;
+        box-shadow: 10px 10px 0 #003049;
+        outline: none;
+      }
+      .card:active {
+        transform: translate(3px, 3px) !important;
+        box-shadow: 2px 2px 0 #003049;
+      }
+      .card:hover .arrow {
+        transform: translateX(6px);
+      }
+      .arrow {
+        transition: transform 0.2s ease;
+        display: inline-block;
+      }
+      .float {
+        animation: float 4s ease-in-out infinite;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0) rotate(-3deg);
+        }
+        50% {
+          transform: translateY(-8px) rotate(3deg);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .float {
+          animation: none;
+        }
+        .card {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="text-navy min-h-screen flex flex-col">
+    <!-- HEADER -->
+    <header
+      class="max-w-5xl mx-auto w-full px-5 pt-12 pb-6 text-center relative"
+    >
+      <span
+        class="float absolute left-4 top-10 text-4xl select-none"
+        aria-hidden="true"
+        >✦</span
+      >
+      <span
+        class="float absolute right-6 top-24 text-3xl text-red-retro select-none"
+        aria-hidden="true"
+        style="animation-delay: 1s"
+        >★</span
+      >
+
+      <div
+        class="inline-block bg-maroon text-cream px-4 py-1 wobbly text-lg -rotate-2 hard-shadow mb-5"
+      >
+        🧰 &nbsp;<span id="badge"></span>
+      </div>
+
+      <h1
+        id="title"
+        class="font-head text-5xl sm:text-7xl leading-none text-maroon"
+      ></h1>
+
+      <!-- garis bergelombang ala coretan tangan -->
+      <svg
+        class="mx-auto mt-2"
+        width="220"
+        height="16"
+        viewBox="0 0 220 16"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M3 9 Q 15 1, 27 9 T 51 9 T 75 9 T 99 9 T 123 9 T 147 9 T 171 9 T 195 9 T 217 9"
+          stroke="#c1121f"
+          stroke-width="4"
+          stroke-linecap="round"
+        />
+      </svg>
+
+      <p id="tagline" class="mt-4 text-xl sm:text-2xl max-w-xl mx-auto"></p>
+    </header>
+
+    <!-- DAFTAR CARD -->
+    <main class="max-w-5xl mx-auto w-full px-5 pb-16 flex-1">
+      <div
+        id="grid"
+        class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 pt-6"
+      ></div>
+      <p id="empty" class="hidden text-center text-xl mt-10">
+        Belum ada tools. Tambahkan di array <code>TOOLS</code> ✏️
+      </p>
+    </main>
+
+    <!-- FOOTER -->
+    <footer
+      class="bg-navy text-cream border-t-4 border-dashed border-sky-retro"
+    >
+      <div class="max-w-5xl mx-auto px-5 py-6 text-center text-lg">
+        <span id="footer"></span>
+      </div>
+    </footer>
+
+    <script>
+      /* ============================================================
+       ✏️  KONFIGURASI — edit bagian ini saja
+       ============================================================ */
+      const SITE = {
+        badge: "Portal Tools",
+        title: "Toolbox IzHaL",
+        tagline:
+          "Kumpulan tools kecil buat kerjaan sehari-hari. Klik kartu, langsung pakai!",
+        footer:
+          "Coded with ☕ & 🩷 " +
+          " by IzHaL" +
+          " © " +
+          new Date().getFullYear(),
+      };
+
+      /* ➕ TAMBAH ITEM BARU: salin satu objek di bawah, lalu ubah isinya.
+       - icon : emoji apa saja (atau tulis "<img src='...' class='w-10 h-10'>")
+       - tag  : label kecil di pojok kartu (boleh dikosongkan "")
+       - color: "red" | "sky" | "maroon" | "navy" (opsional, kalau kosong otomatis bergantian) */
+      const TOOLS = [
+        {
+          icon: "🧾",
+          title: "Form Order",
+          desc: "Form pemesanan praktis untuk mencatat order pelanggan.",
+          url: "https://form-order-inky.vercel.app",
+          tag: "Form",
+        },
+        {
+          icon: "📐",
+          title: "Rasio Cetak",
+          desc: "Hitung rasio & ukuran cetak dengan cepat dan akurat.",
+          url: "https://izhal27.github.io/rasio-cetak/",
+          tag: "Kalkulator",
+        },
+        {
+          icon: "✂️",
+          title: "Roll Cut",
+          desc: "Atur pemotongan roll supaya bahan lebih hemat.",
+          url: "https://izhal27.github.io/roll-cut/",
+          tag: "Kalkulator",
+        },
+        // {
+        //   icon: "🚀",
+        //   title: "Tools Baru",
+        //   desc: "Deskripsi singkat tools baru.",
+        //   url: "https://contoh.com",
+        //   tag: "Baru",
+        //   color: "maroon",
+        // },
+      ];
+      /* ============================================================ */
+
+      const COLORS = {
+        red: { bg: "#c1121f", fg: "#fdf0d5" },
+        sky: { bg: "#669bbc", fg: "#003049" },
+        maroon: { bg: "#780000", fg: "#fdf0d5" },
+        navy: { bg: "#003049", fg: "#fdf0d5" },
+      };
+      const ORDER = ["red", "sky", "maroon", "navy"];
+      const TILTS = [
+        "-rotate-1",
+        "rotate-1",
+        "rotate-[0.5deg]",
+        "-rotate-[0.5deg]",
+      ];
+
+      const esc = (s = "") =>
+        String(s).replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+
+      // isi teks header/footer
+      document.getElementById("badge").textContent = SITE.badge;
+      document.getElementById("title").textContent = SITE.title;
+      document.getElementById("tagline").textContent = SITE.tagline;
+      document.getElementById("footer").textContent = SITE.footer;
+      document.title = SITE.title + " — Kumpulan Tools";
+
+      // render kartu
+      const grid = document.getElementById("grid");
+      if (!TOOLS.length)
+        document.getElementById("empty").classList.remove("hidden");
+
+      grid.innerHTML = TOOLS.map((t, i) => {
+        const c = COLORS[t.color] || COLORS[ORDER[i % ORDER.length]];
+        const tilt = TILTS[i % TILTS.length];
+        const shape = i % 2 ? "wobbly-2" : "wobbly";
+        return `
+        <a href="${esc(t.url)}" target="_blank" rel="noopener noreferrer"
+           class="card ${tilt} ${shape} hard-shadow relative block bg-cream border-4 border-navy p-6 pt-12"
+           aria-label="Buka ${esc(t.title)}">
+          ${
+            t.tag
+              ? `<span class="absolute -top-4 right-5 px-3 py-0.5 text-base border-2 border-navy wobbly rotate-3"
+                         style="background:${c.bg};color:${c.fg}">${esc(t.tag)}</span>`
+              : ""
+          }
+          <div class="absolute -top-8 left-5 w-16 h-16 flex items-center justify-center text-4xl border-4 border-navy wobbly-2 -rotate-6"
+               style="background:${c.bg};color:${c.fg}">${t.icon || "🔗"}</div>
+          <h2 class="font-head text-3xl text-maroon leading-tight">${esc(t.title)}</h2>
+          <p class="mt-2 text-lg leading-snug">${esc(t.desc)}</p>
+          <div class="mt-4 pt-3 border-t-2 border-dashed border-navy flex items-center justify-between text-lg">
+            <span class="truncate pr-3 opacity-70">${esc(t.url.replace(/^https?:\/\//, "").replace(/\/$/, ""))}</span>
+            <span class="font-head text-2xl text-red-retro whitespace-nowrap">Buka <span class="arrow">→</span></span>
+          </div>
+        </a>`;
+      }).join("");
+    </script>
+  </body>
+</html>
